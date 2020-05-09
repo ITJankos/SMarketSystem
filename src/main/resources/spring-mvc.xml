@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	
+	<!-- 扫描包 -->
+	<context:component-scan base-package="com.houpu.web"/>
+
+	<!--开启注解支持-->
+	<mvc:annotation-driven/>
+
+	<!-- 开启静态资源访问 -->
+	<mvc:default-servlet-handler/>
+
+	<!-- 配置视图解析器 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/pages/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+
+
+    <!--文件上传解析器-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+       <!--文件上传大小限制，单位b-->
+		<property name="maxUploadSize" value="102400000"></property>
+	</bean>
+
+	<!-- 注册自定义拦截器 -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<!-- 指定当前拦截器拦截的路径 -->
+			<mvc:mapping path="/user/**"/>
+			<mvc:mapping path="/bill/**"/>
+			<mvc:mapping path="/provider/**"/>
+			<mvc:mapping path="/poi/**"/>
+			<mvc:mapping path="/role/**"/>
+			<!-- 指定当前拦截器不需要拦截的路径-->
+			<mvc:exclude-mapping path="/user/login" />
+			<bean class="com.houpu.web.interceptor.LoginInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors>
+
+
+</beans>
